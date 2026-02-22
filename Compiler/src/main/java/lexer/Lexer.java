@@ -1,3 +1,8 @@
+
+package lexer;
+
+import lexer.Token;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,23 +15,28 @@ public class Lexer {
         this.input = input;
     }
 
-    public List<Token> Tokenize () {
+    public List<Token> tokenize () {
         List<Token> tokens = new ArrayList<>();
 
         while (pos < input.length()) {
             char current = input.charAt(pos);
 
-            if (current = '\n') {
+            if (current == '\n') {
                 line++;
                 pos++;
             } else if (Character.isWhitespace(current)) {
+                pos++;
+            } else if (Character.isLetter(current)) {
                 tokens.add(readIdentifier());
             } else if (Character.isDigit(current)) {
                 tokens.add(readNumber());
             } else {
-                
+                tokens.add(new Token(String.valueOf(current), String.valueOf(current), line));
+                pos++;  
             }
+
         }
+        return tokens;
     }
 
     private Token readIdentifier() {
